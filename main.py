@@ -1,20 +1,68 @@
-from question_model import Question
-from data import question_data
-from quiz_brain import QuizBrain
-from ui import QuizInterface
-question_bank = []
-for question in question_data:
-    question_text = question["question"]
-    question_answer = question["correct_answer"]
-    new_question = Question(question_text, question_answer)
-    question_bank.append(new_question)
+import requests
+from datetime import datetime
+
+USERNAME = "sathya"
+TOKEN = "kmawporqnJFIQJFOq"
+GRAPH_ID = "graph1"
+
+pixela_endpoint = "https://pixe.la/v1/users"
+
+user_params = {
+    "token": TOKEN,
+    "username": USERNAME,
+    "agreeTermsOfService": "yes",
+    "notMinor": "yes",
+}
+
+## POST
+# response = requests.post(url=pixela_endpoint, json=user_params)
+# print(response.text)
+
+graph_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs"
+
+graph_config = {
+    "id": "graph1",
+    "name": "Cycling Graph",
+    "unit": "Km",
+    "type": "float",
+    "color": "ajisai"
+}
 
 
-quiz = QuizBrain(question_bank)
-quiz_ui =QuizInterface()
+headers = {
+    "X-USER-TOKEN": TOKEN
+}
 
-#while quiz.still_has_questions():
- #   quiz.next_question()
+response = requests.post(url=graph_endpoint, json=graph_config, headers=headers)
+print(response.text)
 
-print("You've completed the quiz")
-print(f"Your final score was: {quiz.score}/{quiz.question_number}")
+pixel_creation_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}"
+
+today = datetime.now()
+# print(today.strftime("%Y%m%d"))
+
+pixel_data = {
+    "date": tofday.strftime("%Y%m%d"),
+    "quantity": "15",
+}
+
+response = requests.post(url=pixel_creation_endpoint, json=pixel_data, headers=headers)
+print(response.text)
+
+update_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}/{today.strftime('%Y%m%d')}"
+
+new_pixel_data = {
+    "quantity": "4.5"
+}
+
+## PUT
+# response = requests.put(url=update_endpoint, json=new_pixel_data, headers=headers)
+# print(response.text)
+
+
+delete_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}/{today.strftime('%Y%m%d')}"
+
+
+## DELETE
+# response = requests.delete(url=delete_endpoint, headers=headers)
+# print(response.text)
