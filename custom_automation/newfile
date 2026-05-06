@@ -1,0 +1,36 @@
+import os
+import webbrowser
+from datetime import datetime
+
+# Step 1: Create Folder
+folder_name = "Automation_Project"
+
+if not os.path.exists(folder_name):
+    os.mkdir(folder_name)
+    print("Folder created successfully")
+else:
+    print("Folder already exists")
+
+# Step 2: Create Text File
+file_path = folder_name + "/report.txt"
+
+file = open(file_path, "w")
+
+# Step 3: Write Date and Time
+current_time = datetime.now()
+
+file.write("Python Automation Project\n")
+file.write("-------------------------\n")
+file.write("Current Date and Time:\n")
+file.write(str(current_time))
+
+file.close()
+
+print("File created and data written successfully")
+
+# Step 4: Open Google Automatically
+webbrowser.open("https://www.google.com")
+
+print("Google opened successfully")
+
+print("Automation completed")
